@@ -57,7 +57,7 @@ Prob_Distr_Params = Initial_Data[[8]]
 
 Init_nets = Inital_bayes_inf(population,Network_stats, 
                  Prob_Distr, Prob_Distr_Params,covPattern,
-                 Ia,Il,R,beta_a,beta_l,gamma_a,gamma_l, T_dist)
+                 Ia,Il,R,beta_a,beta_l,gamma_a,gamma_l, T_dist, P_truth, init_P_truth_bool, G_truth, init_G_truth_bool)
 
 G = Init_nets[[1]] #G_truth #
 P = Init_nets[[2]] #P_truth #
@@ -78,7 +78,7 @@ for (mcmc_counter in c(1:n_mcmc_trials)) {
   
   P = Update_P(G,Ia,Il,R,beta_a,beta_l,gamma_a,gamma_l, T_dist)
 
-  Prob_Distr_Params = Update_Prob_Distr_Params(G,Prob_Distr_Params_hyperprior=Prob_Distr_Params_hyperprior, Network_stats = Network_stats, Prob_Distr = Prob_Distr, Prob_Distr_Params = Prob_Distr_Params, G_stats = G_stats)
+  Prob_Distr_Params = Update_Prob_Distr_Params(G,Prob_Distr_Params_hyperprior=Prob_Distr_Params_hyperprior, Network_stats = Network_stats, Prob_Distr = Prob_Distr, Prob_Distr_Params = Prob_Distr_Params, G_stats = G_stats, MCMC_wgt = MCMC_wgt)
   
   #ecount_G = c(ecount_G, igraph::ecount(G))
   #ecount_P = c(ecount_P, igraph::ecount(P))
@@ -147,82 +147,12 @@ abline(h=mean(ProbDistr_stats.df[,3]), col = 'green')
 #abline(h=mean(ProbDistr_stats.df[,3]) + sd(ProbDistr_stats.df[,3]), col = 'green', lty = 2)
 #abline(h=mean(ProbDistr_stats.df[,3]) - sd(ProbDistr_stats.df[,3]), col = 'green', lty = 2)
 
-####################
-
-library('ggplot2')
-
-net_results.df = data.frame(mean_val = c(apply(G_stats.df[-c(1:800),], 2, mean), apply(ProbDistr_stats.df, 2, mean)),
-           var_val = c(apply(G_stats.df, 2, var), apply(ProbDistr_stats.df, 2, var)),
-           stat_type = c(rep("Posterior", 3), rep("Prior", 3)),
-           net_prop = rep(c("00", "01", "11"), 2),
-           truth = rep(as.numeric(G_stats_truth), 2)
-) %>% mutate(bias2_val = (mean_val - truth)^2) %>%
-  mutate(mse_val = bias2_val + var_val)
-
-ggplot(net_results.df, aes(x=net_prop, y=mean_val, fill = stat_type)) + 
-  geom_bar(stat = "identity", position=position_dodge())
-
-ggplot(net_results.df, aes(x=net_prop, y=var_val, fill = stat_type)) + 
-  geom_bar(stat = "identity", position=position_dodge())
-
-ggplot(net_results.df, aes(x=net_prop, y=bias2_val, fill = stat_type)) + 
-  geom_bar(stat = "identity", position=position_dodge())
-
-ggplot(net_results.df, aes(x=net_prop, y=mse_val, fill = stat_type)) + 
-  geom_bar(stat = "identity", position=position_dodge())
-
-net_results.df %>% filter(stat_type == "Prior") %>% pull(mse_val) %>% sum()
-net_results.df %>% filter(stat_type == "Posterior") %>% pull(mse_val) %>% sum()
-
-#################################
-
-cbind(((apply(G_stats.df, 2, mean) %>% c())/population),
-      (as.numeric(G_stats_truth[1,]))/population) %>% View()
-
-ProbDistr_stats.df = c()
-for (p_counter in c(1:n_mcmc_trials)) {
-  x2 = as.numeric(gtools::rdirichlet(n = 1, alpha = Prob_Distr_Params_hyperprior[[3]]))
-  ProbDistr_stats.df = rbind(ProbDistr_stats.df, population*x2)
-}
-
-par(mfrow = c(3,3))
-
-for (i in c(1:9)) {
-  plot(G_stats.df[,i], ylab = paste("Degree", i), xlab = "Sample",
-       ylim = c(min(c(G_stats.df[,i], ProbDistr_stats.df[,i], as.numeric(G_stats_truth[i]))), 
-                max(c(G_stats.df[,i], ProbDistr_stats.df[,i], as.numeric(G_stats_truth[i])))))
-  abline(h=G_stats_truth[i], col = 'red')
-  abline(h=mean(G_stats.df[,i]), col = 'blue')
-  abline(h=mean(ProbDistr_stats.df[,i]), col = 'green')
-}
-
-net_results_full.df = data.frame(mean_val = c(apply(G_stats.df[-c(1:800),], 2, mean), apply(ProbDistr_stats.df, 2, mean)),
-                            var_val = c(apply(G_stats.df[-c(1:800),], 2, var), apply(ProbDistr_stats.df, 2, var)),
-                            stat_type = c(rep("Posterior", population), rep("Prior", population)),
-                            net_prop = rep(paste("Degree", c(0:(population-1)), sep="_"), 2),
-                            truth = rep(as.numeric(G_stats_truth), 2)
-) %>% mutate(bias2_val = (mean_val - truth)^2) %>%
-  mutate(mse_val = bias2_val + var_val)
-
-net_results.df = net_results_full.df %>% filter(net_prop %in% paste("Degree", c(2:7), sep="_"))
-
-ggplot(net_results.df, aes(x=net_prop, y=mean_val, fill = stat_type)) + 
-  geom_bar(stat = "identity", position=position_dodge())
-
-ggplot(net_results.df, aes(x=net_prop, y=var_val, fill = stat_type)) + 
-  geom_bar(stat = "identity", position=position_dodge())
-
-ggplot(net_results.df, aes(x=net_prop, y=bias2_val, fill = stat_type)) + 
-  geom_bar(stat = "identity", position=position_dodge())
-
-ggplot(net_results.df, aes(x=net_prop, y=mse_val, fill = stat_type)) + 
-  geom_bar(stat = "identity", position=position_dodge())
-
-net_results_full.df %>% filter(stat_type == "Prior") %>% pull(mse_val) %>% sum()
-net_results_full.df %>% filter(stat_type == "Posterior") %>% pull(mse_val) %>% sum()
-
-net_results.df %>% filter(stat_type == "Prior") %>% pull(mse_val) %>% sum()
-net_results.df %>% filter(stat_type == "Posterior") %>% pull(mse_val) %>% sum()
-
-
 ##################################
+
+results_list = list(G_stats.df,
+                    Prob_Distr_Params,
+                    Prob_Distr_Params_hyperprior,
+                    n_mcmc_trials,
+                    G_stats_truth,
+                    init_seed
+                    )
