@@ -95,7 +95,8 @@ post_mse_all_mixing = post_mse_all
 #prior_mse_all = c()
 #post_mse_all = c()
 
-directory_list = c("num_samples-MCMC_wgt-0", "num_samples-MCMC_wgt-0.25", "num_samples-MCMC_wgt-0.50", "num_samples-MCMC_wgt-0.75", "num_samples-MCMC_wgt-1") 
+#directory_list = c("num_samples-MCMC_wgt-0", "num_samples-MCMC_wgt-0.25", "num_samples-MCMC_wgt-0.50", "num_samples-MCMC_wgt-0.75", "num_samples-MCMC_wgt-1") 
+directory_list = c("0", "0.25", "0.5", "0.75", "1")
 
 mse_all = data.frame(distr = NULL,
                      mse = NULL,
@@ -106,7 +107,9 @@ for (directory in directory_list) {
   
   for (sample_size in c(25, 50, 100, 200)) {
     
-    load_file = paste("C:/Users/ravij/OneDrive/Desktop/Network Research/network inference/NetBayes_git/NetBayes_git/Simulations3-init_P_truth_bool-FALSE/", directory, "/combined-results-", sample_size, ".rda", sep = "") 
+    #load_file = paste("C:/Users/ravij/OneDrive/Desktop/Network Research/network inference/NetBayes_git/NetBayes_git/Simulations3-init_P_truth_bool-FALSE/", directory, "/combined-results-", sample_size, ".rda", sep = "") 
+    load_file = paste("C:/Users/ravij/OneDrive/Desktop/Network Research/network inference/NetBayes_git/NetBayes_git/COVIDSims/MCMC_wgt-", directory, "_num_samples-", sample_size, ".rda", sep = "") 
+    
     load(load_file)
     
     prior_mse = c()

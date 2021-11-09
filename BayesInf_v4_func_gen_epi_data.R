@@ -46,7 +46,7 @@ generate_epidemic_data <- function(beta_a = 1/5,
     Il = Initial_Data[[4]]
     R = Initial_Data[[5]]
     
-    if (igraph::ecount(P) > 5) {
+    if (igraph::ecount(P) > 50) {
       invalid_epidemic = FALSE
       print("No Epidemic: restarting...")
     }
@@ -194,9 +194,22 @@ SIIR.simulator <- function(g, population, beta_a, beta_l, gamma_a, gamma_l, num_
 
 
 Initialize_G_P_Ia_Il_R <- function(population, beta_a, beta_l, gamma_a, gamma_l, G = NULL, num_init_infected = 1) {
-  
-  exampleepidemic <- SIIR.simulator(G, population, beta_a, beta_l, gamma_a, gamma_l, num_init_infected)
 
+  if (beta_a == 0) { 
+    #Run SEIR model
+    
+    library('epinet')
+    exampleepidemic <- SEIR.simulator(M = network::as.edgelist(intergraph::asNetwork(G)),
+                                      N = population, beta = beta_l, 
+                                      ki = 1, thetai = 1/gamma_l,
+                                      ke = 1, thetae = 1/gamma_a,
+                                      latencydist='gamma')
+    detach("package:epinet")
+    
+  } else {
+    exampleepidemic <- SIIR.simulator(G, population, beta_a, beta_l, gamma_a, gamma_l, num_init_infected)
+  }
+  
   nodes_attr_df = data.frame(name = c(0:(population-1)))
   p_df = data.frame(from = exampleepidemic[-which(is.na(exampleepidemic[,2])),2]-1, 
              to = exampleepidemic[-which(is.na(exampleepidemic[,2])),1]-1)

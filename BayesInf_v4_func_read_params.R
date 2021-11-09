@@ -8,9 +8,9 @@ covPattern = c(rep(0,population/2), rep(1,population/2)) #only use for Mixing
 #Epidemic parameters
 num_init_infected = 1
 beta_a = 0
-beta_l = 1
-gamma_a = 1/5
-gamma_l = 1/2
+beta_l = 5.5/(14*50)*.6
+gamma_a = 1/4
+gamma_l = 1/14
 
 #Network model parameters
 #Network_stats = list(c("Mixing"))
@@ -19,7 +19,7 @@ Prob_Distr = list(c("Multinomial_Poisson"))
 Prob_Distr_Params = vector("list", 2)
 Prob_Distr_Params[[1]] = c(1000) #Number or edges in mixing matrix [1,1], [1,2], and [2,2]
 #Prob_Distr_Params[[2]] = c(0.1, 0.3, 0.6) 
-Prob_Distr_Params[[2]] = ppois(c(0:(population-1)), lambda=5, log = FALSE)
+Prob_Distr_Params[[2]] = ppois(c(0:(population-1)), lambda=50, log = FALSE)
   #c(c(0.0001, 0.0001, 0.2, 0.3, 0.2, 0.1, 0.05, 0.025, 0.025), rep(0.0001, 491)) 
 
 
