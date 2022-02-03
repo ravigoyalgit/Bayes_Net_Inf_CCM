@@ -109,6 +109,11 @@ generate_epidemic_data <- function(beta_a = 1/5,
         alpha = Prob_Distr_Params_hyperprior[[3]]
         sampled_v = sample(igraph::V(G), num_samples, replace=FALSE)
         sampled_v_deg =igraph::degree(G, sampled_v, mode = "all")
+        
+        if(reporting_bias == TRUE) {
+          sampled_v_deg = gen_reporting_bias(sampled_v_deg)
+        }
+        
         g_deghist = (sampled_v_deg+1) %>% tabulate(nbins = population)
 
         Prob_Distr_Params_hyperprior[[3]] = alpha + g_deghist
@@ -234,3 +239,31 @@ Initialize_G_P_Ia_Il_R <- function(population, beta_a, beta_l, gamma_a, gamma_l,
   return(list(G,P,Ia,Il,R))
   
 }
+
+
+gen_reporting_bias <- function(sampled_v_deg) {
+  
+  orig_sampled_v_deg = sum(sampled_v_deg)
+  bias_sampled_v_deg = round(orig_sampled_v_deg * ratio_orig_mean_deg)
+  
+  if (ratio_orig_mean_deg < 1) {
+    num_remove = orig_sampled_v_deg - bias_sampled_v_deg
+    bias_sampled_v_deg = orig_sampled_v_deg
+    for (i in c(1:num_remove)) {
+      id = sample(c(1:length(sampled_v_deg)), 1, prob = bias_sampled_v_deg)
+      bias_sampled_v_deg[id] = bias_sampled_v_deg[id] - 1
+    }
+  }
+  
+  if (ratio_orig_mean_deg < 1) {
+    num_add = orig_sampled_v_deg - bias_sampled_v_deg
+    bias_sampled_v_deg = orig_sampled_v_deg
+    for (i in c(1:num_add)) {
+      id = sample(c(1:length(sampled_v_deg)), 1, prob = NULL)
+      bias_sampled_v_deg[id] = bias_sampled_v_deg[id] - 1
+    }
+  }
+  
+  return(bias_sampled_v_deg)
+}
+
