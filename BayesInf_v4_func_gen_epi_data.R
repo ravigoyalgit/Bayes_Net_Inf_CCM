@@ -243,24 +243,24 @@ Initialize_G_P_Ia_Il_R <- function(population, beta_a, beta_l, gamma_a, gamma_l,
 
 gen_reporting_bias <- function(sampled_v_deg) {
   
-  orig_sampled_v_deg = sum(sampled_v_deg)
-  bias_sampled_v_deg = round(orig_sampled_v_deg * ratio_orig_mean_deg)
+  orig_sampled_v_deg_total = sum(sampled_v_deg)
+  bias_sampled_v_deg_total = round(orig_sampled_v_deg_total * ratio_orig_mean_deg)
+  
+  bias_sampled_v_deg = sampled_v_deg
   
   if (ratio_orig_mean_deg < 1) {
-    num_remove = orig_sampled_v_deg - bias_sampled_v_deg
-    bias_sampled_v_deg = orig_sampled_v_deg
+    num_remove = orig_sampled_v_deg_total - bias_sampled_v_deg_total
     for (i in c(1:num_remove)) {
       id = sample(c(1:length(sampled_v_deg)), 1, prob = bias_sampled_v_deg)
       bias_sampled_v_deg[id] = bias_sampled_v_deg[id] - 1
     }
   }
   
-  if (ratio_orig_mean_deg < 1) {
-    num_add = orig_sampled_v_deg - bias_sampled_v_deg
-    bias_sampled_v_deg = orig_sampled_v_deg
+  if (ratio_orig_mean_deg > 1) {
+    num_add = bias_sampled_v_deg_total - orig_sampled_v_deg_total
     for (i in c(1:num_add)) {
       id = sample(c(1:length(sampled_v_deg)), 1, prob = NULL)
-      bias_sampled_v_deg[id] = bias_sampled_v_deg[id] - 1
+      bias_sampled_v_deg[id] = bias_sampled_v_deg[id] + 1
     }
   }
   
