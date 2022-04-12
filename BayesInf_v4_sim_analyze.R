@@ -1,5 +1,7 @@
 
 library('tidyverse')
+library('xtable')
+
 memory.limit(size = 12000)
 ################################
 ################################
@@ -12,7 +14,7 @@ memory.limit(size = 12000)
 directory_list = c("0.75") #"0", "025", 
 #directory_list = c("0.5", "0.6", "0.7", "0.8", "0.9") #"0", "025", 
 
-lambda = 50
+lambda = 20
 range_start = 1001
 range_end = 2000
 mse_sim.df = data.frame(distr = NULL,
@@ -74,8 +76,11 @@ for (directory in directory_list) {
         
         net_results.df = net_results_full.df 
         
-        prior_mse = net_results.df %>% filter(stat_type == "Prior") %>% pull(mse_val) %>% sum()
-        post_mse = net_results.df %>% filter(stat_type == "Posterior") %>% pull(mse_val) %>% sum()
+        #prior_mse = net_results.df %>% filter(stat_type == "Prior") %>% pull(mse_val) %>% sum()
+        #post_mse = net_results.df %>% filter(stat_type == "Posterior") %>% pull(mse_val) %>% sum()
+        
+        prior_mse = net_results.df %>% filter(stat_type == "Prior") %>% pull(bias2_val) %>% sum()
+        post_mse = net_results.df %>% filter(stat_type == "Posterior") %>% pull(bias2_val) %>% sum()
         
         mse_sim_ind.df = data.frame(distr = c("prior", "post"),
                                     mse = c(prior_mse, post_mse),
@@ -110,7 +115,7 @@ p1 = ggplot(data=mse_all %>% filter(mcmc_wgt_df == 0.75), aes(x=as.factor(sample
         axis.title=element_text(size=14,face="bold")) +
   scale_fill_discrete(name = "Data Sources", labels = c("Multiple Sources\nIntegrated", "Sexual Behavior Survey\nOnly"))
 
-svg(filename = paste("C:/Users/ravij/Dropbox/Academic/Research/Projects/Bayes_Net_Inf_CCM/Bayes_Net_Inf_CCM_results/v7x250/fig_lambda_", lambda, ".svg", sep = ""),
+svg(filename = paste("C:/Users/ravij/Dropbox/Academic/Research/Projects/Bayes_Net_Inf_CCM/Bayes_Net_Inf_CCM_results/v7x250/fig_lambda_bias2", lambda, ".svg", sep = ""),
     width = 20, height = 20)
 p1
 dev.off()
@@ -119,8 +124,8 @@ mse_all %>% filter(mcmc_wgt_df == 0.75) %>%
   pivot_wider(names_from = distr, values_from = mse) %>%
   mutate(MSE_improve = (prior-post)/prior * 100)
 
-save.image(paste("C:/Users/ravij/Dropbox/Academic/Research/Projects/Bayes_Net_Inf_CCM/Bayes_Net_Inf_CCM_results/v7x250/workspace_lambda", lambda, ".RData", sep =""))
-saveRDS(mse_sim.df , file = paste("C:/Users/ravij/Dropbox/Academic/Research/Projects/Bayes_Net_Inf_CCM/Bayes_Net_Inf_CCM_results/v7x250/mse_lambda", lambda, ".rds", sep =""))
+save.image(paste("C:/Users/ravij/Dropbox/Academic/Research/Projects/Bayes_Net_Inf_CCM/Bayes_Net_Inf_CCM_results/v7x250/workspace_lambda_bias2", lambda, ".RData", sep =""))
+saveRDS(mse_sim.df , file = paste("C:/Users/ravij/Dropbox/Academic/Research/Projects/Bayes_Net_Inf_CCM/Bayes_Net_Inf_CCM_results/v7x250/mse_lambda_bias2", lambda, ".rds", sep =""))
 
 ############
 
@@ -175,6 +180,44 @@ dev.off()
 
 ############
 
+mse_table = mse_sim.df %>%
+  group_by(distr, sample_size_df, mcmc_wgt_df, lambda) %>%
+  summarise(num_sims = mean(num_sim),
+            num_sims_analyze = n(),
+            mse = median(mse)) %>%
+  pivot_wider(names_from = distr, values_from = mse) %>%
+  mutate(MSE_improve = (prior-post)/prior * 100,
+         per_sims = (num_sims_analyze/num_sims)* 100) %>%
+  ungroup() %>%
+  select(lambda, sample_size_df, num_sims, num_sims_analyze, per_sims, MSE_improve) %>%
+  arrange(lambda, sample_size_df)
+
+print(xtable(mse_table %>% select(-c(MSE_improve, per_sims)), digits = 0), include.rownames=FALSE)
+
+############
+
+LtoM <-colorRampPalette(c('red', 'yellow' ))
+Mid <- "snow3"
+MtoH <-colorRampPalette(c('lightgreen', 'darkgreen'))
+
+p = ggplot(data=mse_table, aes(x=as.factor(sample_size_df), y=MSE_improve, fill=MSE_improve)) +
+  geom_bar(stat="identity", position=position_dodge()) +
+  labs(x="Sexual Behavior Survey Samples", y = "MSE improvement") +
+  theme(panel.background = element_blank(), axis.line = element_line(colour = "black"),
+        legend.position = "none",
+        axis.text=element_text(size=12),
+        axis.title=element_text(size=14,face="bold")) +
+  #scale_fill_gradient2(low=LtoM(100), mid='snow3', high=MtoH(100), space='Lab') +
+  scale_fill_gradient2(low='red', mid='snow3', high='darkgreen', space='Lab') +
+  facet_wrap(vars(lambda), scales = "free_y", nrow = 2) 
+
+svg(filename = paste("C:/Users/ravij/Dropbox/Academic/Research/Projects/Bayes_Net_Inf_CCM/Bayes_Net_Inf_CCM_results/v7x250/fig_mse_improve.svg", sep = ""),
+    width = 20, height = 15)
+p
+dev.off()
+
+############
+
 
 lambda = 20
 mse_all.df = readRDS(paste("C:/Users/ravij/Dropbox/Academic/Research/Projects/Bayes_Net_Inf_CCM/Bayes_Net_Inf_CCM_results/v7x250/mse_lambda", lambda, ".rds", sep =""))
@@ -199,7 +242,7 @@ G_stats_truth = results[[i_index]][[5]]
 
 ############
 
-G_stats_lim.df = as_tibble(G_stats.df[c(1:2000), c((lambda-5):(6+lambda))])
+G_stats_lim.df = as_tibble(G_stats.df[c(1:2000), c((lambda-2):(3+lambda))])
 colnames(G_stats_lim.df) =  paste("Degree", c((lambda-5):(6+lambda)), sep = " ")
 G_stats_lim.df$iter = c(1:nrow(G_stats_lim.df))
 G_stats_long.df = pivot_longer(G_stats_lim.df,
@@ -219,7 +262,7 @@ p = ggplot(data=G_stats_long.df, aes(x=iter, y=Count, fill=Prop)) +
 
 
 svg(filename = paste("C:/Users/ravij/Dropbox/Academic/Research/Projects/Bayes_Net_Inf_CCM/Bayes_Net_Inf_CCM_results/v7x250/fig_trace_lambda_", lambda, ".svg", sep = ""),
-    width = 20, height = 20)
+    width = 20, height = 15)
 p
 dev.off()
 

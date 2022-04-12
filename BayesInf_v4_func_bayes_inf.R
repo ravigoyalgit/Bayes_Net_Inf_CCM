@@ -30,7 +30,9 @@ Update_G <- function(G,P,Ia,Il,R,beta_a,beta_l, Prob_Distr_Params, Network_stats
                                           Il = Il, 
                                           R = R, 
                                           epi_params = epi_params,
-                                          print_calculations = FALSE) 
+                                          print_calculations = FALSE,
+                                          use_G = TRUE,
+                                          outfile = "none") 
   
   return(list(CCMnet_Result[[1]], CCMnet_Result[[2]]))
 }

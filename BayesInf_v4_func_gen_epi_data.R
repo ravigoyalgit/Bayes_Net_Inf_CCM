@@ -46,7 +46,7 @@ generate_epidemic_data <- function(beta_a = 1/5,
     Il = Initial_Data[[4]]
     R = Initial_Data[[5]]
     
-    if (igraph::ecount(P) > 50) {
+    if (igraph::ecount(P) > 0) {
       invalid_epidemic = FALSE
       print("No Epidemic: restarting...")
     }
