@@ -1,17 +1,37 @@
 Package: bayesnetinf
-Title: What the Package Does (One Line, Title Case)
+Title: Generate Network Data and Estimate Parameters with Bayesian
+    Inference
 Version: 0.0.0.9000
-Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+Authors@R: c(
+    person("Ravi", "Goyal", , "r1goyal@health.ucsd.edu", role = c("aut", "cre")),
+    person(c("Sally", "K."), "Slipher", , "sallyslipher@montana.edu", role = c("aut", "cre"))
+  )
+Description: A framework to estimate parameters of a static, agent-based
+    network model. Parameters of the contact network are estimated with
+    the use of Bayesian inference and Congruence Class Models (CCMs) in
+    order to incorporate multiple data sources (epidiological, viral
+    genetic, and risk behavior survey data).
 License: MIT + file LICENSE
+URL: https://github.com/ravigoyalgit/Bayes_Net_Inf_CCM
+BugReports: https://github.com/ravigoyalgit/Bayes_Net_Inf_CCM/issues
+Depends:
+    tidyverse
+Imports: 
+    CCMnetpy,
+    e1071,
+    epinet,
+    gtools,
+    igraph,
+    intergraph,
+    mvtnorm,
+    network
 Suggests: 
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)
+VignetteBuilder: 
+    knitr
 Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.0
-VignetteBuilder: knitr
