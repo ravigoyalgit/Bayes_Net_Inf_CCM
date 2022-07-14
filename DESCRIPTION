@@ -1,10 +1,9 @@
 Package: bayesnetinf
-Title: Generate Network Data and Estimate Parameters with Bayesian
-    Inference
+Title: Estimate Network Parameters with CCMs and Bayesian Inference
 Version: 0.0.0.9000
 Authors@R: c(
-    person("Ravi", "Goyal", , "r1goyal@health.ucsd.edu", role = c("aut", "cre")),
-    person(c("Sally", "K."), "Slipher", , "sallyslipher@montana.edu", role = c("aut", "cre"))
+    person("Ravi", "Goyal", , "r1goyal@health.ucsd.edu", role = c("aut")),
+    person(c("Sally", "K."), "Slipher", , "sallyslipher@montana.edu", role = c("aut"))
   )
 Description: A framework to estimate parameters of a static, agent-based
     network model. Parameters of the contact network are estimated with
@@ -14,8 +13,6 @@ Description: A framework to estimate parameters of a static, agent-based
 License: MIT + file LICENSE
 URL: https://github.com/ravigoyalgit/Bayes_Net_Inf_CCM
 BugReports: https://github.com/ravigoyalgit/Bayes_Net_Inf_CCM/issues
-Depends:
-    tidyverse
 Imports: 
     CCMnetpy,
     e1071,
@@ -24,7 +21,8 @@ Imports:
     igraph,
     intergraph,
     mvtnorm,
-    network
+    network,
+    reticulate
 Suggests: 
     knitr,
     rmarkdown,

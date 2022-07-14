@@ -1,10 +1,10 @@
 #' @title Inital_bayes_inf
 #' @description setup starting contact and transmission networks for Bayesian inference
 #' @param population number of individuals in the network
-#' @param Network_stats
-#' @param Prob_Distr
-#' @param Prob_Distr_Params
-#' @param covPattern
+#' @param Network_stats ?
+#' @param Prob_Distr ?
+#' @param Prob_Distr_Params ?
+#' @param covPattern ?
 #' @param Ia vector of times of infection for each individual
 #' @param Il vector of times of transition to long-term infection for each individual
 #' @param R vector of times of transition to recovery for each individual

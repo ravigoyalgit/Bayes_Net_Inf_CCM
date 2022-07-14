@@ -155,7 +155,7 @@ generate_epidemic_data <- function(beta_a = 1/5,
 
 #' @title SIIR.simulator
 #' @description simulates a SIIR epidemic process on a population
-#' @param g
+#' @param g ?
 #' @param population = number of individuals in the network
 #' @param beta_a probability of infection for acute phase
 #' @param beta_l probability of infection for long-term phase

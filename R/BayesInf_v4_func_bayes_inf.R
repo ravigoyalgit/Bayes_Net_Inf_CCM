@@ -291,12 +291,12 @@ Update_I <- function(G,P,Ia,Il,R,beta_a,beta_l,gamma_a,gamma_l) {
 
 #' @title Update_Prob_Distr_Params
 #' @description updates the probability distribution parameters as part of a Metropolis-Hastings algorithm
-#' @param g
+#' @param g ?
 #' @param Prob_Distr_Params_hyperprior hyperpriors for behavior data
-#' @param Network_stats
-#' @param Prob_Distr
-#' @param Prob_Distr_Params
-#' @param G_stats
+#' @param Network_stats ?
+#' @param Prob_Distr ?
+#' @param Prob_Distr_Params ?
+#' @param G_stats ?
 #' @param MCMC_wgt weight from 0 to 1 indicating how much weight to put on the prior versus the MCMC weight
 #' @return Prob_Distr_Params parameter values
 #' @export
@@ -347,13 +347,13 @@ Update_Prob_Distr_Params <- function(g, Prob_Distr_Params_hyperprior, Network_st
 
 #' @title update_r
 #' @description gives the probability of the Metropolis-Hastings algorithm accepting or rejecting the proposal network
-#' @param r
-#' @param g
+#' @param r ?
+#' @param g ?
 #' @param P transmission network
 #' @param Ia vector of times of infection for each individual
 #' @param Il vector of times of transition to long-term infection for each individual
-#' @param R_times
-#' @param edge1
+#' @param R_times ?
+#' @param edge1 ?
 #' @param beta_a probability of infection for acute phase
 #' @param beta_l probability of infection for long-term phase
 #' @return p_noinfect / (1 - p_noinfect) or (1-p_noinfect) / p_noinfect, probability of acceptance or rejection

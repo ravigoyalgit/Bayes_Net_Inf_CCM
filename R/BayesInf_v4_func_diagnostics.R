@@ -28,8 +28,8 @@ genetic_seq_diagnostic <- function(P,T) {
 
 #' @title uncategorized_diagnostic
 #' @description gives statistics on infection times (acute and long-term)
-#' @param P_a
-#' @param G_a
+#' @param P_a ?
+#' @param G_a ?
 #' @param G contact network
 #' @param P transmission network
 #' @param Ia vector of times of infection for each individual
@@ -48,8 +48,8 @@ uncategorized_diagnostic <- function(P_a, G_a, G, P, Ia, Il, R, Initial_Data) {
 
 #' @title accuracy_G_P_diagnostic
 #' @description give statistics on contact and transmission network
-#' @param P_a
-#' @param G_a
+#' @param P_a ?
+#' @param G_a ?
 #' @param Initial_Data simulated epidemic data
 #' @return print(mean(false_positives_dist_P)), print(mean(true_positives_dist_P)), print(mean(false_positives_dist_G)), print(mean(true_positives_dist_G)), mean of true and false positives for contact and transmission networks
 #' @export
@@ -107,7 +107,7 @@ accuracy_G_P_diagnostic <- function(P_a, G_a, Initial_Data) {
 
 #' @title network_properties_diagnostic
 #' @description gives statistics on network properties
-#' @param G_a
+#' @param G_a ?
 #' @param burnin length of burn-in
 #' @param view_graphs plot network property assortativity and density (default: FALSE)
 #' @return list(length(which(assort_a >=  assort_truth))/length(assort_a), mean(assort_a), assort_truth, mean(ecount_a), ecount_truth), means, true values, and proportions for edge count and assortativity
