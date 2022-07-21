@@ -1,5 +1,5 @@
 #' @title Bayes_Net_Inf_CCM
-#' @description generates data and estimates contact network properties using survey, clinical, and genetic data, reads parameters froo read_params()
+#' @description generates data and estimates contact network properties using survey, clinical, and genetic data
 #' @description sets parameters for simulating network data and performing Bayesian inference, which is run with Bayes_Net_Inf_CCM()
 #' @param population number of individuals in the network
 #' @param beta_a probability of infection for acute phase
@@ -58,8 +58,8 @@ Bayes_Net_Inf_CCM <- function(population = 1000,
   #COVID epidemic parameters
   if(epidemic=="HIV") {
     population = 1000
-    beta_a = 1-((1-(0.01505*alpha))^3)
-    beta_l = 1-((1-(0.008911817*alpha))^3)
+    beta_a = 1-((1-(0.01505))^3)
+    beta_l = 1-((1-(0.008911817))^3)
     gamma_a = 3/2
     gamma_l = 3/(36+4.2011+3.8709-2)
     size = 1.017340

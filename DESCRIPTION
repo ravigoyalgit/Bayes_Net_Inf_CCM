@@ -2,7 +2,7 @@ Package: bayesnetinf
 Title: Estimate Network Parameters with CCMs and Bayesian Inference
 Version: 0.0.0.9000
 Authors@R: c(
-    person("Ravi", "Goyal", , "r1goyal@health.ucsd.edu", role = c("aut")),
+    person("Ravi", "Goyal", , "r1goyal@health.ucsd.edu", role = c("aut", "cre")),
     person(c("Sally", "K."), "Slipher", , "sallyslipher@montana.edu", role = c("aut"))
   )
 Description: A framework to estimate parameters of a static, agent-based

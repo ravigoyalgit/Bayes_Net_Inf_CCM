@@ -55,7 +55,7 @@ Bayes_Net_Inf_CCM(
 results_list = list(G_stats.df, Prob_Distr_Params, Prob_Distr_Params_hyperprior, n_mcmc_trials, G_stats_truth, init_seed), results of data simulation and Bayesian inference, including estimated contact network statistics
 }
 \description{
-generates data and estimates contact network properties using survey, clinical, and genetic data, reads parameters froo read_params()
+generates data and estimates contact network properties using survey, clinical, and genetic data
 
 sets parameters for simulating network data and performing Bayesian inference, which is run with Bayes_Net_Inf_CCM()
 }
