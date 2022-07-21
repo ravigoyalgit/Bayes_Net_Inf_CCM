@@ -17,11 +17,11 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Ravi Goyal \email{r1goyal@health.ucsd.edu}
+\strong{Maintainer}: Sally K. Slipher \email{sallyslipher@montana.edu}
 
 Authors:
 \itemize{
-  \item Sally K. Slipher \email{sallyslipher@montana.edu}
+  \item Ravi Goyal \email{r1goyal@health.ucsd.edu}
 }
 
 }

@@ -11,6 +11,8 @@ Bayes_Net_Inf_CCM(
   gamma_a = 1/4,
   gamma_l = 1/14,
   lambda = 10,
+  size = NULL,
+  mu = NULL,
   degree_dist = "poisson",
   num_samples = 25,
   genetic_bits = 1024,
@@ -33,6 +35,10 @@ Bayes_Net_Inf_CCM(
 
 \item{lambda}{mean degree for the Poisson degree distribution}
 
+\item{size}{scale for the Negative Binomial degree distribution}
+
+\item{mu}{mean degree for the Negative Binomial degree distribution}
+
 \item{degree_dist}{degree distribution of contacts, can be "poisson" (requires lambda parameter) or "nbinom" (requires size and mu parameters)}
 
 \item{num_samples}{number of behavior survey samples}
@@ -46,10 +52,6 @@ Bayes_Net_Inf_CCM(
 \item{ratio_orig_mean_deg}{ratio of how much to inflate or deflate number of partners reported; is no increase/decrease, 0.5 is half the mean degree reported, 2 is twice the mean degree reported}
 
 \item{epidemic}{select a set of epidemic parameters to use instead of entering custom parameters, can be set to "HIV" or "COVID" (overrides and parameters set in the function's arguments); set to "NULL" to use custom parameters via the function's arguments}
-
-\item{size}{scale for the Negative Binomial degree distribution}
-
-\item{mu}{mean degree for the Negative Binomial degree distribution}
 }
 \value{
 results_list = list(G_stats.df, Prob_Distr_Params, Prob_Distr_Params_hyperprior, n_mcmc_trials, G_stats_truth, init_seed), results of data simulation and Bayesian inference, including estimated contact network statistics
